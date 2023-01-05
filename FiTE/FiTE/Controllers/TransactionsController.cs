@@ -19,7 +19,11 @@ namespace FiTE.Controllers
 
         // GET: Transactions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransaction(String? date, String? purpose, String? amount)
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransaction(
+            [FromQuery] String? date, 
+            [FromQuery] String? purpose,
+            [FromQuery] String? amount
+        )
         {
             if (_context.Transaction == null)
             {
