@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FiTE.Data;
 using FiTE.Models;
 
 namespace FiTE.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class TransactionsController : ControllerBase
     {
@@ -21,7 +16,7 @@ namespace FiTE.Controllers
             _context = context;
         }
 
-        // GET: api/Transactions
+        // GET: Transactions
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Transaction>>> GetTransaction()
         {
@@ -32,7 +27,7 @@ namespace FiTE.Controllers
             return await _context.Transaction.ToListAsync();
         }
 
-        // GET: api/Transactions/5
+        // GET: Transactions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Transaction>> GetTransaction(int id)
         {
@@ -50,7 +45,7 @@ namespace FiTE.Controllers
             return transaction;
         }
 
-        // PUT: api/Transactions/5
+        // PUT: Transactions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTransaction(int id, Transaction transaction)
@@ -81,7 +76,7 @@ namespace FiTE.Controllers
             return NoContent();
         }
 
-        // POST: api/Transactions
+        // POST: Transactions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Transaction>> PostTransaction(Transaction transaction)
@@ -96,7 +91,7 @@ namespace FiTE.Controllers
             return CreatedAtAction("GetTransaction", new { id = transaction.ID }, transaction);
         }
 
-        // DELETE: api/Transactions/5
+        // DELETE: Transactions/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTransaction(int id)
         {
