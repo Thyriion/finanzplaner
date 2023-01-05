@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using FiTE.Data;
 using FiTE.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FiTE.Controllers
 {
@@ -18,23 +19,56 @@ namespace FiTE.Controllers
 
         // GET: Transactions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransaction()
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransaction(String? date, String? purpose, String? amount)
         {
-          if (_context.Transaction == null)
-          {
-              return NotFound();
-          }
-            return await _context.Transaction.ToListAsync();
+            if (_context.Transaction == null)
+            {
+                return NotFound();
+            }
+
+            var transactions = await _context.Transaction.ToListAsync();
+
+            switch (date)
+            {
+                case "asc":
+                    transactions = transactions.OrderBy(x => x.Date).ToList();
+                    break;
+                case "desc":
+                    transactions = transactions.OrderByDescending(x => x.Date).ToList();
+                    break;
+            }
+
+            switch (purpose)
+            {
+                case "asc":
+                    transactions = transactions.OrderBy(x => x.Purpose).ToList();
+                    break;
+                case "desc":
+                    transactions = transactions.OrderByDescending(x => x.Purpose).ToList();
+                    break;
+            }
+
+            switch (amount)
+            {
+                case "asc":
+                    transactions = transactions.OrderBy(x => x.Amount).ToList();
+                    break;
+                case "desc":
+                    transactions = transactions.OrderByDescending(x => x.Amount).ToList();
+                    break;
+            }
+
+            return transactions;
         }
 
         // GET: Transactions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Transaction>> GetTransaction(int id)
         {
-          if (_context.Transaction == null)
-          {
-              return NotFound();
-          }
+            if (_context.Transaction == null)
+            {
+                return NotFound();
+            }
             var transaction = await _context.Transaction.FindAsync(id);
 
             if (transaction == null)
@@ -81,10 +115,10 @@ namespace FiTE.Controllers
         [HttpPost]
         public async Task<ActionResult<Transaction>> PostTransaction(Transaction transaction)
         {
-          if (_context.Transaction == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Transaction'  is null.");
-          }
+            if (_context.Transaction == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Transaction'  is null.");
+            }
             _context.Transaction.Add(transaction);
             await _context.SaveChangesAsync();
 
